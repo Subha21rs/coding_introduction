@@ -8,6 +8,11 @@
 # To load the packages in r to use, run
 # library(package_name)
 
+
+##### YET TO CODE
+# 1. ggplot
+
+
 library(datasets)
 head(iris)
 summary(iris)
@@ -107,3 +112,45 @@ data <- USJudgeRatings
 
 reg1= lm(RTEN~., data)
 summary(reg1)
+
+
+######## Functions in R
+squre <- function(x){
+  y <- x^2
+  return (y)
+}
+
+squre(3)
+
+##### for loop
+for (i in 1:5){
+  print(i)
+}
+
+sum_val <- 0
+for (i in 1:100) {
+  sum_val <- sum_val + i
+}
+print(sum_val)
+
+####### if-else statement
+x <- -10
+if (x>0){
+  print('Positive Number')
+}else if (x<0){
+  print('Negative number')
+}else{
+  print(paste(x, "is zero"))
+}
+
+# vectorized ifelse()
+x <- c(10,-5,0,4)
+result <- ifelse(x>0, 'Positive', 'Not positive')
+print(result)
+
+#### apply function
+mat <- matrix(1:9, nrow = 3)
+print(mat)
+apply(mat, 1, sum) # row sum
+apply(mat, 2, mean) #   column means
+
