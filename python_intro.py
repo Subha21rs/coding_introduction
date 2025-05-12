@@ -561,6 +561,95 @@ plt.ylabel('Second Principal Component')
 plt.tight_layout()
 plt.show()
 
+"""**Linear Model**"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+
+iris = load_iris()
+X = iris.data[:, :2]
+y = iris.data[:, 2]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Coefficients:", model.coef_)
+print("Intercept:", model.intercept_)
+print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
+print("R² Score:", r2_score(y_test, y_pred))
+
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred, color='blue', label='Predicted vs Actual', alpha=0.7)
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', lw=2, label='Regression Line')
+plt.xlabel('Actual Petal Length (cm)')
+plt.ylabel('Predicted Petal Length (cm)')
+plt.title('Actual vs Predicted Petal Length (Linear Regression)')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+"""**OOP**"""
+
+class Dog:
+    def __init__(self, name, breed):
+        self.name = name
+        self.breed = breed
+
+    def bark(self):
+        print(f"{self.name} says Woof!")
+
+# Create an object
+my_dog = Dog("Buddy", "Golden Retriever")
+my_dog.bark()
+
+class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def area(self):
+        return self.width * self.height
+
+r1 = Rectangle(5, 10)
+print("Area:", r1.area())
+
+class Student:
+    def __init__(self, name):
+        self.name = name
+        self.marks = []
+
+    def add_mark(self, mark):
+        self.marks.append(mark)
+
+    def average(self):
+        return sum(self.marks) / len(self.marks)
+
+s1 = Student("Alice")
+s1.add_mark(80)
+s1.add_mark(90)
+print(f"{s1.name}'s average: {s1.average()}")
+print(s1)
+
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+
+    def __str__(self):
+        return f"{self.title} by {self.author}"
+
+b1 = Book("1984", "George Orwell")
+print(b1)
+
 """**Some questions to try yourself**
 1. Write a for loop to print the first 10 Fibonacci numbers. (F(n+1)=F(n)+F(n-1))
 2. Generate a list of 100 random numbers and calculate the 25th, 50th, and 75th percentiles using numpy.
