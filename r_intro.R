@@ -26,13 +26,20 @@ l1 <- TRUE
 typeof(l1)
 
 ### vectors and basic operations
-v= c(10,20,30,40)
+v= c(10,20,30,40,50)
 is.vector(v)
 mean(v)
 sum(v)
 length(v)
-u=v[v>20]
+
+v1=v[1:3]
+print(v1)
+
+u = v[v>20]
 print(u)
+
+v=c(2,3,4,5,'hello',TRUE)
+print(v)
 
 ## matrix
 m1=matrix(c(1,2,3,4), nrow=2,byrow=TRUE)
@@ -44,6 +51,52 @@ vLogical <- c(T,F,T)
 
 dfa <- cbind(vNumeric,vCharacter,vLogical)
 df= as.data.frame(dfa)
+head(df)
+
+name <- c("Rajiv", "Sandip", "Somnath", "Goutam")
+age <- c(25, 30, 22, 28)
+score <- c(90, 85, 88, 76)
+
+df <- data.frame(name, age, score)
+
+head(df)
+str(df)
+summary(df)
+
+print(df$name)
+print(df$age)
+print(df$score)
+df[1, ]
+df[, 2]
+df[2:3, c("name", "score")]
+
+# add a column
+result <- df$score>=80
+df$passed <- result
+print(df)
+
+# remove a column
+df$age <- NULL
+print(df)
+
+# rename a column
+names(df)[names(df) == "score"] <- "final_score"
+print(df)
+
+# sort rows
+df[order(df$final_score), ]# Ascending
+df[order(-df$final_score), ]# Descending
+
+# grouped summary
+aggregate(final_score ~ passed, data = df, mean)
+
+## merged two data frames
+df1 <- data.frame(id = c(1, 2), score = c(80, 90))
+print(df1)
+df2 <- data.frame(id = c(1, 2), grade = c("A", "B"))
+print(df2)
+merged_df <- merge(df1, df2, by = "id")
+print(merged_df)
 
 ### sequence generation
 x1= seq(10)
@@ -109,6 +162,9 @@ lines(density(lynx), col='red',lwd=2)
 data<- read.csv('data/example_data.csv')
 head(data)
 
+mydata <- data[,-33]
+write.csv(mydata,'data/output.csv',row.names=FALSE)
+
 ######## Linear regression
 ?USJudgeRatings
 head(USJudgeRatings)
@@ -117,6 +173,12 @@ data <- USJudgeRatings
 reg1= lm(RTEN~., data)
 summary(reg1)
 
+y <- data$RTEN
+y_pred<- predict(reg1)
+
+plot(y,y_pred,
+     xlab='Actual RTEN', ylab='Predicted RTEN')
+abline(a = 0, b = 1, col = "red", lwd = 2, lty = 2)
 
 ######## Functions in R
 squre <- function(x){
@@ -216,6 +278,11 @@ plott = ggplot(df_plot, aes(x = x, y = y, color = class)) +
 plott
 ##ggsave("different_plots.pdf", plot = plott, width = 10, height = 6)
 
+## boxpot with ggplot2
+ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_boxplot() +
+  theme_minimal()
+
 ############ 3D plots using plotly
 #install.packages("plotly")
 library(plotly)
@@ -253,6 +320,16 @@ plot_ly(x = ~x, y = ~y, z = ~z) %>%
            zaxis = list(title = "Z")
          ))
 
+######### correlation and heatmap
+corr <-cor(mtcars)
+heatmap(corr, main = "Correlation Heatmap", col = colorRampPalette(c("blue", "white", "red"))(100))
+# red:strong +ve corr; white:no corr; buue: strong -ve corr
+
+# # using pheatmap package
+# library(pheatmap)
+# pheatmap(cor(mtcars),
+#          color = colorRampPalette(c("blue", "white", "red"))(100),
+#          main = "Correlation Heatmap") 
 
 ##### simulation
 #set.seed(13)
@@ -359,8 +436,23 @@ predicted_class <- lda_pred$class
 accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
 print(paste("Accuracy:", round(accuracy * 100, 2), "%"))
 
+############ K-means Clustering
+set.seed(12)
+data <- iris[,1:4]
+kmeans_mdl=kmeans(data,centers = 3)
 
+true_species=iris$Species
+cluster_labels=kmeans_mdl$cluster
+table(cluster_labels,true_species)
 
+mapped_labels<- ifelse(cluster_labels==2,'setosa',
+                       ifelse(cluster_labels==1,'versicolor','virginica'))
+mapped_labels=factor(mapped_labels,levels = levels(true_species))
+
+par(mfrow=c(1,2))
+plot(data[,1:2],col=true_species, pch=19)
+plot(data[,1:2],col=mapped_labels,pch=19)
+par(mfrow=c(1,1))
 
 ##########################################
 #### Some questions ######################
